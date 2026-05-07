@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jak se teď máš v práci?</title>
+<style>
+:root{--p:#e61b67;--p2:#bf1456;--p3:#fff0f6;--bg:#fff6fa;--text:#24151e;--mut:#7d6370;--line:#f3d4df;--card:#fff;--shadow:0 18px 44px rgba(191,20,86,.13)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(230,27,103,.20),transparent 33%),linear-gradient(180deg,#fffafd,var(--bg));color:var(--text)}
+.wrap{width:min(880px,calc(100% - 28px));margin:auto;padding:28px 0 42px}.hero{background:linear-gradient(135deg,var(--p2),var(--p),#f35a95);color:#fff;border-radius:30px;padding:34px;box-shadow:var(--shadow)}
+h1{margin:0 0 10px;font-size:clamp(32px,5vw,50px);letter-spacing:-.04em;line-height:1.05}.lead{margin:0;max-width:760px;line-height:1.55;color:rgba(255,255,255,.92);font-size:17px}
+.note,.card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}.note{margin:18px 0;padding:16px 18px;line-height:1.55}.note strong{color:var(--p)}
+.card{padding:24px}h2{margin:0 0 8px;font-size:24px}.sub{margin:0 0 18px;color:var(--mut);line-height:1.55}
+.top{display:grid;grid-template-columns:1fr 180px;gap:14px;align-items:end;margin-bottom:18px}.field{display:grid;gap:7px;font-size:14px;font-weight:750;color:#4d3b45}input,textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:13px 14px;font:inherit;outline:0}textarea{min-height:94px;resize:vertical}input:focus,textarea:focus{border-color:#f35a95;box-shadow:0 0 0 4px rgba(230,27,103,.14)}
+.progress-label{display:flex;justify-content:space-between;font-size:13px;color:var(--mut);margin-bottom:8px}.progress{height:10px;background:#f8dce8;border-radius:99px;overflow:hidden}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--p),#f35a95);transition:.2s}
+.section-title{display:flex;align-items:center;gap:10px;margin:22px 0 12px;padding-top:18px;border-top:1px solid var(--line)}.section-title:first-of-type{border-top:0;padding-top:0}.badge{display:grid;place-items:center;width:34px;height:34px;border-radius:99px;background:var(--p3);color:var(--p);font-weight:900}.section-title h3{margin:0;font-size:18px}
+.question{display:grid;gap:11px;padding:16px;border:1px solid var(--line);border-radius:17px;margin-bottom:12px;background:#fff}.q-text{display:flex;gap:8px;line-height:1.45;font-weight:750}.q-num{min-width:24px;color:var(--p);font-weight:950}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.scale label{position:relative;cursor:pointer}.scale input{position:absolute;opacity:0}.pill{display:grid;place-items:center;gap:3px;min-height:54px;border:1px solid var(--line);border-radius:14px;background:#fffafd;font-weight:900}.pill small{font-size:10px;color:var(--mut);font-weight:550;text-align:center}.scale input:checked+.pill{border-color:var(--p);background:var(--p3);box-shadow:0 0 0 3px rgba(230,27,103,.14);transform:translateY(-1px)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}button{border:0;border-radius:15px;padding:14px 18px;font:inherit;font-weight:900;cursor:pointer}.primary{background:var(--p);color:#fff}.secondary{background:#ffe1ed;color:var(--p2)}button:disabled{opacity:.65;cursor:not-allowed}
+.error{display:none;margin-top:14px;padding:12px 14px;border-radius:15px;border:1px solid #ffd1dc;background:#fff4f7;color:#9f1239}.thanks{display:none;text-align:center;padding:36px 24px}.icon{width:68px;height:68px;border-radius:99px;background:var(--p3);color:var(--p);display:grid;place-items:center;font-size:34px;font-weight:900;margin:0 auto 16px}.small{color:var(--mut);font-size:13px;line-height:1.5;margin-top:12px}
+@media(max-width:680px){.wrap{width:min(100% - 20px,880px);padding-top:14px}.hero,.card{padding:22px}.top{grid-template-columns:1fr}.scale{grid-template-columns:1fr}.pill{grid-template-columns:34px 1fr;justify-items:start;min-height:44px;padding:8px 10px}.pill small{text-align:left}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero"><h1>Jak se teď máš v práci?</h1><p class="lead">Krátký check-in na pár minut. Nejde o hodnocení výkonu ani test osobnosti. Chci jen líp pochopit, co ti teď v práci pomáhá, co tě brzdí a co spolu můžeme zlepšit.</p></section>
+<div class="note"><strong>Prosím vyplň upřímně.</strong> Výsledek se ti nebude zobrazovat. Po odeslání mi přijde e-mailem a pak si ho spolu v klidu projdeme.</div>
+<form id="f" class="card">
+<div class="top"><label class="field">Podepiš se prosím křestním jménem nebo přezdívkou<input name="person" placeholder="Např. Jana" required></label><div><div class="progress-label"><span>Vyplněno</span><strong id="pt">0 %</strong></div><div class="progress"><div id="pb"></div></div></div></div>
+<h2>Otázky k posledním 2–3 týdnům</h2><p class="sub">Klikni na číslo podle toho, jak moc to na tebe sedí. 1 = vůbec ne, 5 = úplně ano.</p>
+<div id="qs"></div>
+<h2 style="margin-top:26px">Ještě pár slov navíc</h2><p class="sub">Tady můžeš napsat věci, které se do čísel nevejdou.</p>
+<label class="field">Co by ti teď nejvíc pomohlo, aby se ti pracovalo líp?<textarea name="help" placeholder="Klidně jedna konkrétní věc, změna nebo podpora..."></textarea></label>
+<label class="field" style="margin-top:12px">Co ti teď v práci nejvíc bere energii?<textarea name="drain" placeholder="Např. chaos v prioritách, množství práce, nejasnost, rušení..."></textarea></label>
+<label class="field" style="margin-top:12px">Je něco, co mi chceš ještě vzkázat?<textarea name="anything" placeholder="Volitelné..."></textarea></label>
+<div id="err" class="error"></div>
+<div class="actions"><button id="send" class="primary" type="submit">Odeslat</button><button id="reset" class="secondary" type="button">Vymazat</button></div>
+<div class="small">Na této stránce se žádný profil ani skóre nezobrazí.</div>
+</form>
+<section id="thanks" class="card thanks"><div class="icon">✓</div><h2>Díky, mám to.</h2><p class="sub">Odpovědi jsou odeslané. Výsledek si spolu projdeme osobně a v klidu.</p></section>
+</div>
+<script>
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbznTLRKiW-iPUvXqaka5jG5v_D2-5tQO8GriQg6YG5RLHXGNeXQy-pASbNwV2iCrX08/exec";
+const GROUPS=[
+{area:"Energie a regenerace",key:"energy",items:["Mám teď dost energie na běžné pracovní úkoly.","Po práci se většinou dokážu alespoň částečně zregenerovat.","Nemám pocit, že dlouhodobě jedu jen z rezerv."]},
+{area:"Motivace a smysl",key:"motivation",items:["Vidím smysl v tom, na čem pracuji.","Mám chuť posouvat věci dopředu, nejen „přežít den“.","V práci mám alespoň občas momenty, které mě těší nebo nabíjejí."]},
+{area:"Jasnost a kompetence",key:"clarity",items:["Vím, co se ode mě teď očekává.","Vím, které priority jsou opravdu nejdůležitější.","Cítím, že mám schopnosti, informace a nástroje, abych svou práci zvládl/a."]},
+{area:"Autonomie a vliv",key:"autonomy",items:["Mám přiměřený vliv na to, jak svou práci dělám.","Můžu otevřeně říct, když je úkol, termín nebo priorita nereálná.","Moje kapacita je při plánování práce reálně zohledňována."]},
+{area:"Podpora a bezpečí",key:"support",items:["Mám v týmu nebo u manažera oporu, když ji potřebuji.","Můžu bezpečně mluvit o problémech, chybách nebo nejistotě.","Mám pocit, že se mnou lidé v práci jednají s respektem."]},
+{area:"Zátěž a zvládnutelnost",key:"workload",items:["Množství práce je pro mě teď zvládnutelné.","Mám dost prostoru na soustředěnou práci bez neustálého přerušování.","Změny, požadavky a priority se na mě teď nevalí chaoticky."]}
+];
+const LAB={1:"vůbec ne",2:"spíše ne",3:"jak kdy",4:"spíše ano",5:"úplně ano"};
+const f=document.getElementById("f"),qs=document.getElementById("qs"),err=document.getElementById("err"),pb=document.getElementById("pb"),pt=document.getElementById("pt"),send=document.getElementById("send"),thanks=document.getElementById("thanks");
+function esc(s){return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function render(){let n=1;qs.innerHTML=GROUPS.map((g,gi)=>`<div class="section-title"><span class="badge">${gi+1}</span><h3>${esc(g.area)}</h3></div>`+g.items.map(t=>{let name=`q${n}`,num=n++;return `<div class="question"><div class="q-text"><span class="q-num">${num}.</span><span>${esc(t)}</span></div><div class="scale">${[1,2,3,4,5].map(v=>`<label><input type="radio" name="${name}" value="${v}" data-area="${g.key}" required><span class="pill">${v}<small>${LAB[v]}</small></span></label>`).join("")}</div></div>`}).join("")).join("")}
+function progress(){let a=f.querySelectorAll('input[type="radio"]:checked').length,p=Math.round(a/18*100);pt.textContent=p+" %";pb.style.width=p+"%"}
+function show(m){err.textContent=m;err.style.display="block";err.scrollIntoView({behavior:"smooth",block:"center"})}
+function hide(){err.style.display="none";err.textContent=""}
+function collect(){const fd=new FormData(f),details=[],answers={};for(let i=1;i<=18;i++){let val=fd.get("q"+i);if(!val)return{error:"Chybí odpověď u otázky "+i+"."};let input=f.querySelector(`input[name="q${i}"][value="${val}"]`),q=input.closest(".question").querySelector(".q-text span:last-child").textContent;answers["q"+i]=Number(val);details.push({questionNumber:i,area:input.dataset.area,question:q,value:Number(val)})}return{submittedAt:new Date().toISOString(),person:String(fd.get("person")||"").trim(),answers,answerDetails:details,openAnswers:{help:String(fd.get("help")||"").trim(),drain:String(fd.get("drain")||"").trim(),anything:String(fd.get("anything")||"").trim()}}}
+render();progress();f.addEventListener("change",progress);
+f.addEventListener("submit",async e=>{e.preventDefault();hide();if(!WEB_APP_URL||WEB_APP_URL.includes("SEM_VLOZ"))return show("Formulář ještě není napojený. Doplň URL Google Apps Scriptu do WEB_APP_URL.");let data=collect();if(data.error)return show(data.error);if(!data.person)return show("Prosím doplň aspoň křestní jméno nebo přezdívku.");send.disabled=true;send.textContent="Odesílám...";try{await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});f.style.display="none";thanks.style.display="block";thanks.scrollIntoView({behavior:"smooth",block:"start"})}catch(e){send.disabled=false;send.textContent="Odeslat";show("Odeslání se nepovedlo. Zkus to prosím ještě jednou.")}});
+document.getElementById("reset").onclick=()=>{if(confirm("Opravdu chceš vymazat odpovědi?")){f.reset();progress();hide()}};
+</script>
+</body>
+</html>
